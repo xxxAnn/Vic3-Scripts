@@ -1,1 +1,1 @@
-Script for calculating the `p value` of a production method in victoria 3. Simply copy paste a production method's code into the `production_method` file and insert the path to the `goods.txt` file in config.txt, the script will automatically calculate the p vlaue of the Production Method.
+Script for calculating the `p value` of a production method in victoria 3. The first line of config.txt should be the path to the `goods` file and the second line should be the path to the production methods folder. 

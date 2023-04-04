@@ -5,7 +5,10 @@ pat_lvl = re.compile(r"level = (.*?)\n")
 pat_pm = re.compile(r"\"(pm_.*?)\"")
 pat_ag = re.compile(r"(effect_starting_buildings_.*?) = yes")
 pat_ftxt = re.compile(r"(pm_.*?) = {(\n|.)*?level_scaled = {((\n|.)*?)}")
+pat_ftxt2 = re.compile(r"(pm_.*?) = {(\n|.)*?workforce_scaled = {((\n|.)*?)}")
 pat_empl = re.compile(r'building_employment_(.*?)_add = (.*?)\n')
+pat_input = re.compile(r'building_input_(.*?)_add = (.*?)\n')
+pat_output = re.compile(r'building_output_(.*?)_add = (.*?)\n')
 
 
 with open("config.txt", "r", encoding='utf-8') as f:
@@ -50,19 +53,30 @@ if __name__ == "__main__":
     pms = pms[1:]
 
     pms_dict = {}
+    g_u_dict = {}
+    
+
     for n in os.listdir(loc2):
         with open(loc2 + "\\" + n, "r", encoding='utf-8') as f:
             raw_txt = f.read()
             for pm in pat_ftxt.findall(raw_txt):
-                
                 employee_data = {}
                 for pop in pat_empl.findall(pm[2]):
                     employee_data[pop[0]] = int(pop[1])
                 pms_dict[pm[0]] = employee_data
+            for pm in pat_ftxt2.findall(raw_txt):
+                goods_data = {}
+                # assumes the output and input are distinct
+                for good in pat_input.findall(pm[2]):
+                    goods_data[good[0]] = -int(good[1])
+                for good in pat_output.findall(pm[2]):
+                    goods_data[good[0]] = int(good[1])
+                g_u_dict[pm[0]] = goods_data
 
     l = 0
     for grs in pms:
         gr_dict = {}
+        gru_dict = {}
         for ind_pm_g in grs:
             lvl = int(ind_pm_g[0])
             for ind_pm in ind_pm_g[1]:
@@ -73,6 +87,14 @@ if __name__ == "__main__":
                         else: 
                             gr_dict[k] = lvl*v
                 except: pass
+                try: # empty pms
+                    for k, v in g_u_dict[ind_pm].items():
+                        if k in gru_dict:
+                            gru_dict[k] += lvl*v
+                        else:
+                            gru_dict[k] = lvl*v
+                except: pass
+                
         print((splits[l], gr_dict))
         l+=1
 

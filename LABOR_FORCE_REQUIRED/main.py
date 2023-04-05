@@ -6,9 +6,9 @@ pat_pm = re.compile(r"\"(pm_.*?)\"")
 pat_ag = re.compile(r"(effect_starting_buildings_.*?) = yes")
 pat_ftxt = re.compile(r"(pm_.*?) = {(\n|.)*?level_scaled = {((\n|.)*?)}")
 pat_ftxt2 = re.compile(r"(pm_.*?) = {(\n|.)*?workforce_scaled = {((\n|.)*?)}")
-pat_empl = re.compile(r'building_employment_(.*?)_add = (.*?)\n')
-pat_input = re.compile(r'building_input_(.*?)_add = (.*?)\n')
-pat_output = re.compile(r'building_output_(.*?)_add = (.*?)\n')
+pat_empl = re.compile(r'building_employment_(.*?)_add = (.*?)( |\n)')
+pat_input = re.compile(r'building_input_(.*?)_add = (.*?)( |\n)')
+pat_output = re.compile(r'building_output_(.*?)_add = (.*?)( |\n)')
 
 
 with open("config.txt", "r", encoding='utf-8') as f:
@@ -73,13 +73,18 @@ if __name__ == "__main__":
                     goods_data[good[0]] = int(good[1])
                 g_u_dict[pm[0]] = goods_data
 
+
     l = 0
+
+    rsrs_mem = []
+
     for grs in pms:
         gr_dict = {}
         gru_dict = {}
         for ind_pm_g in grs:
             lvl = int(ind_pm_g[0])
             for ind_pm in ind_pm_g[1]:
+
                 try: # some pms have no employees, so they are simply ignored
                     for k, v in pms_dict[ind_pm].items():
                         if k in gr_dict:
@@ -95,6 +100,6 @@ if __name__ == "__main__":
                             gru_dict[k] = lvl*v
                 except: pass
                 
-        print((splits[l], gr_dict))
+        print((splits[l], gru_dict, gr_dict), "\n")
         l+=1
 

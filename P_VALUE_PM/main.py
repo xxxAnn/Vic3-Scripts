@@ -20,9 +20,11 @@ if __name__ == "__main__":
         goods_prices = dict([(x[0], x[2]) for x in pat.findall(f.read())])
         
     g_u_dict = {}
+
     for n in os.listdir(loc2):
         with open(loc2 + "\\" + n, "r", encoding='utf-8') as f:
             raw_txt = f.read()
+        with open(loc2 + "\\" + n, "w", encoding='utf-8') as f:
             for pm in pat_ftxt.findall(raw_txt):
                 o = price(goods_prices, pat_output.findall(pm[2])) 
                 i = price(goods_prices, pat_input.findall(pm[2]))
@@ -30,5 +32,9 @@ if __name__ == "__main__":
                 e = sum([int(pop[1]) for pop in pat_empl.findall(pm[5])])
                 if e != 0 and (o != 0 or i != 0):
                     g_u_dict[pm[0]] = round((52*o_i)/e, 1)
+                    
+                    raw_txt = re.sub(r"(# p = (.*?)\n)?(.*?){}".format(pm[0]), "# p = {}\n{}".format(g_u_dict[pm[0]], pm[0]), raw_txt)
+            f.write(raw_txt)
+
     with open("out.json", "w", encoding='utf-8') as f:
         f.write(json.dumps(g_u_dict, indent=4))

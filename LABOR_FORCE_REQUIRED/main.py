@@ -1,4 +1,4 @@
-import re, os, itertools
+import re, os, itertools, json
 
 pat = re.compile(r"(effect_starting_buildings_.*?) = {")
 pat_lvl = re.compile(r"level = (.*?)\n")
@@ -100,6 +100,9 @@ if __name__ == "__main__":
                             gru_dict[k] = lvl*v
                 except: pass
                 
-        print((splits[l], gru_dict, gr_dict), "\n")
+        print(splits[l], ": ")
+        print("Overall weekly production: ", json.dumps(gru_dict, indent=4))
+        print("Overall required labour force: ", json.dumps(gr_dict, indent=4))
+        print("\n")
         l+=1
 

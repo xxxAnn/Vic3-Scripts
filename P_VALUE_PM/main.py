@@ -14,6 +14,7 @@ with open("config.txt", "r", encoding='utf-8') as f:
 
 with open("config.txt", "r", encoding='utf-8') as f:
     loc2 = f.readlines()[1].replace("\n", "")
+    
 if __name__ == "__main__":
     with open(loc, "r", encoding='utf-8') as f:
         goods_prices = dict([(x[0], x[2]) for x in pat.findall(f.read())])

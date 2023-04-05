@@ -1,2 +1,4 @@
 D:\Documents\Code\Victoria-3-Cold-War-Era-Mod-CWE\1. CWE Base Mod\Cold War Era Mod (CWE)\common\scripted_effects\00_building_setup.txt
 D:\Documents\Code\Victoria-3-Cold-War-Era-Mod-CWE\1. CWE Base Mod\Cold War Era Mod (CWE)\common\production_methods
+D:\Documents\Code\Victoria-3-Cold-War-Era-Mod-CWE\1. CWE Base Mod\Cold War Era Mod (CWE)\common\buildings
+D:\Documents\Code\Victoria-3-Cold-War-Era-Mod-CWE\1. CWE Base Mod\Cold War Era Mod (CWE)\common\production_method_groups

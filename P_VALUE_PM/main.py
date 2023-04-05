@@ -30,4 +30,5 @@ if __name__ == "__main__":
                 e = sum([int(pop[1]) for pop in pat_empl.findall(pm[5])])
                 if e != 0 and (o != 0 or i != 0):
                     g_u_dict[pm[0]] = round((52*o_i)/e, 1)
-    print(json.dumps(g_u_dict, indent=4))
+    with open("out.json", "w", encoding='utf-8') as f:
+        f.write(json.dumps(g_u_dict, indent=4))

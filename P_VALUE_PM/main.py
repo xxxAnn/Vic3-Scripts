@@ -35,12 +35,12 @@ if __name__ == "__main__":
                 i = 0
                 e = 0
                 for tx in pat_wrkfcld.findall(pm[1]):
-                    o = price(goods_prices, pat_output.findall(tx[0])) 
-                    i = price(goods_prices, pat_input.findall(tx[0]))
+                    o += price(goods_prices, pat_output.findall(tx[0])) 
+                    i += price(goods_prices, pat_input.findall(tx[0]))
 
                 o_i = o - i
                 for tx in pat_lvlscld.findall(pm[1]):
-                    e = sum([int(pop[1]) for pop in pat_empl.findall(tx[0])])
+                    e += sum([int(pop[1]) for pop in pat_empl.findall(tx[0])])
                 if e != 0:
                     g_u_dict[pm[0]] = round((52*o_i)/e, 1)
                     raw_txt = re.sub(r"(# p = (.*?), e = (.*?), pe = (.*?)\n)?(.*?){}".format(pm[0]), "# p = {}, e = {}, pe = {}\n{}".format(g_u_dict[pm[0]], e, g_u_dict[pm[0]]*e, pm[0]), raw_txt)

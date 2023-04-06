@@ -8,6 +8,9 @@ pat_ag = re.compile(r"(effect_starting_buildings_.*?) = yes")
 pat_ftxt = re.compile(r"(pm_.*?) = {(\n|.)*?level_scaled = {((\n|.)*?)}")
 pat_ftxt2 = re.compile(r"(pm_.*?) = {(\n|.)*?workforce_scaled = {((\n|.)*?)}")
 pat_ftxt3 = re.compile(r"(pm_.*?) = {(\n|.)*?unscaled = {((\n|.)*?)}")
+pat_lvlscld = re.compile(r'level_scaled = {((\n|.)*?)}')
+pat_wrkfcld = re.compile(r'workforce_scaled = {((\n|.)*?)}')
+pat_unscld = re.compile(r'workforce_scaled = {((\n|.)*?)}')
 pat_empl = re.compile(r'building_employment_(.*?)_add = (.*?)( |\n)')
 pat_input = re.compile(r'building_input_(.*?)_add = (.*?)( |\n)')
 pat_output = re.compile(r'building_output_(.*?)_add = (.*?)( |\n)')
@@ -78,23 +81,30 @@ if __name__ == "__main__":
     for n in os.listdir(loc2):
         with open(loc2 + "\\" + n, "r", encoding='utf-8') as f:
             raw_txt = f.read()
-        for pm in pat_ftxt.findall(raw_txt):
+            m = re.split(r"(pm.*?) = {", raw_txt.replace("default_building_", "pm_default_building_"))[1:]
+        
+            m = [m[i:i+2] for i in range(0, len(m), 2)]
+
+        for pm in m:
             employee_data = {}
-            for pop in pat_empl.findall(pm[2]):
-                employee_data[pop[0]] = int(pop[1])
+            for dt in pat_lvlscld.findall(pm[1]):
+                for pop in pat_empl.findall(dt[0]):
+                    employee_data[pop[0]] = float(pop[1])
             pms_dict[pm[0]] = employee_data
-        for pm in pat_ftxt2.findall(raw_txt):
+
             goods_data = {}
             # assumes the output and input are distinct
-            for good in pat_input.findall(pm[2]):
-                goods_data[good[0]] = -int(good[1])
-            for good in pat_output.findall(pm[2]):
-                goods_data[good[0]] = int(good[1])
+            for dt in pat_wrkfcld.findall(pm[1]):
+                for good in pat_input.findall(dt[0]):
+                    goods_data[good[0]] = -float(good[1])
+                for good in pat_output.findall(dt[0]):
+                    goods_data[good[0]] = float(good[1])
             g_u_dict[pm[0]] = goods_data
-        for pm in pat_ftxt3.findall(raw_txt):
+
             mult_data = {}
-            for mult in pat_emp_mult.findall(pm[2]):
-                mult_data[mult[0]] = float(mult[1])
+            for dt in pat_unscld.findall(pm[1]):
+                for mult in pat_emp_mult.findall(dt[0]):
+                    mult_data[mult[0]] = float(mult[1])
             mult_dict[pm[0]] = mult_data
 
     # list of PMGs for each building

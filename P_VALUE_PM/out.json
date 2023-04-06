@@ -382,6 +382,7 @@
     "pm_carriers_4": -66.6,
     "pm_carriers_5": -83.2,
     "pm_default_building_subsistence_farms": 0.7,
+    "pm_default_building_subsistence_orchards": 0.8,
     "pm_default_building_subsistence_pastures": 0.7,
     "pm_privately_owned_building_subsistence": 0.0,
     "pm_worker_cooperative_building_subsistence": 0.0,

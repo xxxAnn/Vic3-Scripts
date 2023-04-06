@@ -31,8 +31,6 @@ if __name__ == "__main__":
 
         with open(loc2 + "\\" + n, "w", encoding='utf-8') as f:
             for pm in m:
-                if pm[0] == "pm_merchant_guilds_building_agriculture":
-                    print(pat_empl.findall(pat_lvlscld.findall(pm[1])[0][0]))
                 o = 0
                 i = 0
                 e = 0

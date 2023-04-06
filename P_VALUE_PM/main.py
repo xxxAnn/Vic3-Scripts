@@ -1,7 +1,7 @@
 import re, os, json
 
 def price(price_dic, goods):
-    return sum([int(price_dic[good[0]])*int(good[1]) for good in goods])
+    return sum([float(price_dic[good[0]])*float(good[1]) for good in goods])
 
 pat = re.compile(r'(.*?) = \{(\n|.)*?cost = (.*?)\n(\n|.)*?\}')
 pat_lvlscld = re.compile(r'level_scaled = {((\n|.)*?)}')
@@ -25,11 +25,13 @@ if __name__ == "__main__":
     for n in os.listdir(loc2):
         with open(loc2 + "\\" + n, "r", encoding='utf-8') as f:
             raw_txt = f.read()
-            m = re.split(r"(pm.*?) = {", raw_txt)[1:]
+            m = re.split(r"(pm.*?) = {", raw_txt.replace("default_building_", "pm_default_building_"))[1:]
         
             m = [m[i:i+2] for i in range(0, len(m), 2)]
 
         for pm in m:
+            if pm[0] == "pm_subsistence_pastures":
+                print(pat_lvlscld.findall(pm[1]))
             o = 0
             i = 0
             e = 0
@@ -42,7 +44,7 @@ if __name__ == "__main__":
                 e += sum([int(pop[1]) for pop in pat_empl.findall(tx[0])])
             if e != 0:
                 g_u_dict[pm[0]] = round((52*o_i)/e, 1)
-                raw_txt = re.sub(r"(# p = (.*?), e = (.*?), pe = (.*?)\n)?(.*?){} =".format(pm[0]), "# p = {}, e = {}, pe = {}\n{} =".format(g_u_dict[pm[0]], e, g_u_dict[pm[0]]*e, pm[0]), raw_txt)
+                raw_txt = re.sub(r"(# p = (.*?), e = (.*?), pe = (.*?)\n)?(.*?){} =".format(pm[0].replace("pm_default_building_", "default_building_")), "# p = {}, e = {}, pe = {}\n{} =".format(g_u_dict[pm[0]], e, g_u_dict[pm[0]]*e, pm[0]), raw_txt)
             else:
                 raw_txt = re.sub(r"(# p = (.*?), e = (.*?), pe = (.*?)\n)?(.*?){} =".format(pm[0]), "{} =".format(pm[0]), raw_txt)
         with open(loc2 + "\\" + n, "w", encoding='utf-8') as f:

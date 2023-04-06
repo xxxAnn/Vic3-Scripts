@@ -30,10 +30,9 @@ if __name__ == "__main__":
                 i = price(goods_prices, pat_input.findall(pm[2]))
                 o_i = o - i
                 e = sum([int(pop[1]) for pop in pat_empl.findall(pm[5])])
-                if e != 0 and (o != 0 or i != 0):
+                if e != 0:
                     g_u_dict[pm[0]] = round((52*o_i)/e, 1)
-                    
-                    raw_txt = re.sub(r"(# p = (.*?)\n)?(.*?){}".format(pm[0]), "# p = {}\n{}".format(g_u_dict[pm[0]], pm[0]), raw_txt)
+                    raw_txt = re.sub(r"(# p = (.*?), e = (.*?), pe = (.*?)\n)?(.*?){}".format(pm[0]), "# p = {}, e = {}, pe = {}\n{}".format(g_u_dict[pm[0]], e, g_u_dict[pm[0]]*e, pm[0]), raw_txt)
             f.write(raw_txt)
 
     with open("out.json", "w", encoding='utf-8') as f:
